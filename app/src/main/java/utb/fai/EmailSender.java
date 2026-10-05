@@ -31,7 +31,7 @@ public class EmailSender {
             System.out.write(buffer, 0, len);
         }
 
-        message = "MAIL FROM:" + from +"\r\n";
+        message = "MAIL FROM:<" + from +">\r\n";
         out.write(message.getBytes());
         out.flush();
 
@@ -40,7 +40,7 @@ public class EmailSender {
             System.out.write(buffer, 0, len);
         }
 
-        message = "RCPT TO:" + to +"\r\n";
+        message = "RCPT TO:<" + to +">\r\n";
         out.write(message.getBytes());
         out.flush();
 
