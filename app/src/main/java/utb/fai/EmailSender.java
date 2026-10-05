@@ -46,7 +46,7 @@ public class EmailSender {
 
         message = "DATA\r\n";
         out.write(message.getBytes());
-        message = "Subject: "+ subject +"\r\n";
+        message = "Subject: "+ subject +"\r\n\r\n";
         out.write(message.getBytes());
         message = text + "\r\n";
         out.write(message.getBytes());
