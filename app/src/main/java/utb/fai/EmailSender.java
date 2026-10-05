@@ -52,6 +52,7 @@ public class EmailSender {
         out.write(message.getBytes());
         message = ".\r\n";
         out.write(message.getBytes());
+        out.flush();
     }
 
     /*
