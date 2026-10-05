@@ -4,13 +4,17 @@ import java.net.*;
 import java.io.*;
 
 public class EmailSender {
+    private Socket socket;
+    private String message;
+    private OutputStream out = socket.getOutputStream();
+    private InputStream inp = socket.getInputStream();
     /*
      * Constructor opens Socket to host/port. If the Socket throws an exception
      * during opening,
      * the exception is not handled in the constructor.
      */
     public EmailSender(String host, int port) throws UnknownHostException, IOException {
-
+        socket = new Socket(host, port);
     }
 
     /*
@@ -20,13 +24,43 @@ public class EmailSender {
      * handled by this method.
      */
     public void send(String from, String to, String subject, String text) throws IOException {
+        final byte[] buffer = new byte[256];
+        int len;
+        if(inp.available() > 0){
+            len = inp.read(buffer, 0, 256);
+            System.out.write(buffer, 0, len);
+        }
 
+        message = "MAIL FROM:" + from +"\r\n";
+        out.write(message.getBytes());
+        out.flush();
+
+        if(inp.available() > 0){
+            len = inp.read(buffer, 0, 256);
+            System.out.write(buffer, 0, len);
+        }
+
+        message = "RCPT TO:" + to +"\r\n";
+        out.write(message.getBytes());
+        out.flush();
+
+        message = "DATA\r\n";
+        out.write(message.getBytes());
+        message = "Subject: "+ subject +"\r\n";
+        out.write(message.getBytes());
+        message = text + "\r\n";
+        out.write(message.getBytes());
+        message = ".\r\n";
+        out.write(message.getBytes());
     }
 
     /*
      * Sends QUIT and closes the socket
      */
-    public void close() {
-
+    public void close() throws IOException {
+        message = "QUIT\r\n";
+        out.write(message.getBytes());
+        out.flush();
+        socket.close();
     }
 }
