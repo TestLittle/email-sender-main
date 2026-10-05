@@ -51,10 +51,28 @@ public class EmailSender {
 
         message = "DATA\r\n";
         out.write(message.getBytes());
+
+        if(inp.available() > 0){
+            len = inp.read(buffer, 0, 256);
+            System.out.write(buffer, 0, len);
+        }
+
         message = "Subject: "+ subject +"\r\n";
         out.write(message.getBytes());
+
+        if(inp.available() > 0){
+            len = inp.read(buffer, 0, 256);
+            System.out.write(buffer, 0, len);
+        }
+
         message = text + "\r\n";
         out.write(message.getBytes());
+
+        if(inp.available() > 0){
+            len = inp.read(buffer, 0, 256);
+            System.out.write(buffer, 0, len);
+        }
+
         message = ".\r\n";
         out.write(message.getBytes());
         out.flush();
