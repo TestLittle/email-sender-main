@@ -6,15 +6,13 @@ import java.io.*;
 public class EmailSender {
     private Socket socket;
     private String message;
-    private OutputStream out = socket.getOutputStream();
-    private InputStream inp = socket.getInputStream();
     /*
      * Constructor opens Socket to host/port. If the Socket throws an exception
      * during opening,
      * the exception is not handled in the constructor.
      */
     public EmailSender(String host, int port) throws UnknownHostException, IOException {
-        socket = new Socket(host, port);
+        this.socket = new Socket(host, port);
     }
 
     /*
@@ -24,6 +22,8 @@ public class EmailSender {
      * handled by this method.
      */
     public void send(String from, String to, String subject, String text) throws IOException {
+        OutputStream out = socket.getOutputStream();
+        InputStream inp = socket.getInputStream();
         final byte[] buffer = new byte[256];
         int len;
         if(inp.available() > 0){
@@ -60,6 +60,7 @@ public class EmailSender {
      */
     public void close() throws IOException {
         message = "QUIT\r\n";
+        OutputStream out = socket.getOutputStream();
         out.write(message.getBytes());
         out.flush();
         socket.close();
